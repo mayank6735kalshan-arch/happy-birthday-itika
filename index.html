@@ -141,6 +141,18 @@
 
   .reveal{opacity:0;transform:translateY(24px);transition:opacity 1s ease,transform 1s ease}
   .reveal.in{opacity:1;transform:none}
+  /* music */
+  #music{position:fixed;right:14px;bottom:16px;z-index:55;display:none;align-items:center;gap:10px;cursor:pointer;
+         background:rgba(255,250,243,.96);border:1px solid var(--gold2);border-radius:999px;padding:5px 16px 5px 5px;
+         box-shadow:0 10px 24px -10px rgba(90,60,30,.45);font-family:'Poppins';font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);text-decoration:none}
+  #music.on{display:flex;animation:fade .5s}
+  #ytwrap{width:42px;height:42px;border-radius:50%;overflow:hidden;position:relative;flex:none;box-shadow:0 0 0 2px var(--gold3)}
+  #ytwrap iframe,#yt{position:absolute;left:50%;top:50%;width:76px;height:43px;transform:translate(-50%,-50%) scale(1.05);pointer-events:none}
+  #music .bars{display:inline-flex;gap:2px;align-items:flex-end;height:12px;margin-right:2px}
+  #music .bars i{width:2px;background:var(--gold);height:4px}
+  #music.playing .bars i{animation:eq .9s infinite ease-in-out}
+  #music.playing .bars i:nth-child(2){animation-delay:.2s}#music.playing .bars i:nth-child(3){animation-delay:.4s}
+  @keyframes eq{50%{height:12px}}
 </style>
 </head>
 <body>
@@ -306,11 +318,25 @@
 </div>
 
 <div id="lb"><img id="lbimg" alt=""></div>
+<div id="music"><div id="ytwrap"><div id="yt"></div></div><span class="bars"><i></i><i></i><i></i></span><span id="mlabel">Play our song</span></div>
 
 <script>
+// music (YouTube)
+const VID='5vflRt4V5Pk'; let yt=null, ytReady=false, wantPlay=false, playing=false;
+const mus=document.getElementById('music'), mlab=document.getElementById('mlabel');
+function mUI(){mus.classList.toggle('playing',playing);mlab.textContent=playing?'Pause music':'Play our song';}
+(function(){const t=document.createElement('script');t.src='https://www.youtube.com/iframe_api';document.head.appendChild(t);})();
+window.onYouTubeIframeAPIReady=function(){
+  yt=new YT.Player('yt',{videoId:VID,playerVars:{playsinline:1,controls:0,rel:0,modestbranding:1,loop:1,playlist:VID},
+    events:{onReady:()=>{ytReady=true;yt.setVolume(80);if(wantPlay)yt.playVideo();},
+            onStateChange:e=>{playing=(e.data===1);mUI();},
+            onError:()=>{mus.outerHTML='<a id="music" class="on" href="https://music.youtube.com/watch?v='+VID+'" target="_blank" rel="noopener"><span class="bars"><i></i><i></i><i></i></span><span>Play our song</span></a>';}}});
+};
+function startMusic(){wantPlay=true;mus.classList.add('on');if(ytReady){try{yt.playVideo()}catch(e){}}}
+mus.addEventListener('click',()=>{if(!ytReady){wantPlay=true;return;} if(playing)yt.pauseVideo(); else yt.playVideo();});
 // envelope
 const env=document.getElementById('env'),intro=document.getElementById('intro');
-function openEnv(){ if(env.classList.contains('open'))return; env.classList.add('open');
+function openEnv(){ if(env.classList.contains('open'))return; env.classList.add('open'); startMusic();
   setTimeout(()=>{intro.classList.add('gone');burst(140);revealCheck();},950); }
 intro.addEventListener('click',openEnv);
 
