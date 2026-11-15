@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday Itika</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Pinyon+Script&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ivory:#fbf6ee; --paper:#fffaf3; --ink:#3b2f2a; --soft:#8a7a70;
+    --gold:#b8893b; --gold2:#d9b46a; --gold3:#f1dca6;
+    --blush:#efc6c4; --blush2:#e3a9a7; --sage:#a9b79a;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:'Poppins',sans-serif;color:var(--ink);min-height:100vh;overflow-x:hidden;
+       background:#efe6d8 radial-gradient(circle at 20% 10%,#f7efe3 0,transparent 40%),radial-gradient(circle at 80% 90%,#f3e2d6 0,transparent 45%);}
+  #dust{position:fixed;inset:0;pointer-events:none;z-index:40}
+  .serif{font-family:'Cormorant Garamond',serif}
+  .script{font-family:'Pinyon Script',cursive}
+  .foil{background:linear-gradient(100deg,#9c6f2a 0%,#d9b46a 25%,#f6e3b0 45%,#c99a4b 60%,#8f6424 100%);
+        -webkit-background-clip:text;background-clip:text;color:transparent}
+
+  /* ---------- envelope intro ---------- */
+  #intro{position:fixed;inset:0;z-index:60;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;
+         background:#efe6d8 radial-gradient(circle at 50% 40%,#f8f0e4 0,#eadfce 70%);transition:opacity 1s ease,visibility 1s}
+  #intro.gone{opacity:0;visibility:hidden}
+  .env{position:relative;width:300px;height:200px;cursor:pointer;filter:drop-shadow(0 18px 30px rgba(90,60,30,.18))}
+  .env-body{position:absolute;inset:0;background:linear-gradient(160deg,#f6ead9,#ecdcc4);border-radius:6px}
+  .env-pocket{position:absolute;inset:0;border-radius:6px;overflow:hidden}
+  .env-pocket:before,.env-pocket:after{content:"";position:absolute;bottom:0;width:0;height:0;border-style:solid}
+  .env-pocket:before{left:0;border-width:100px 0 100px 150px;border-color:transparent transparent transparent #efe1cb}
+  .env-pocket:after{right:0;border-width:100px 150px 100px 0;border-color:transparent #eddcc3 transparent transparent}
+  .env-bottom{position:absolute;left:0;right:0;bottom:0;height:0;border-left:150px solid transparent;border-right:150px solid transparent;border-bottom:110px solid #f3e6d2}
+  .env-flap{position:absolute;left:0;top:0;width:0;height:0;border-left:150px solid transparent;border-right:150px solid transparent;border-top:115px solid #e9d7bc;
+            transform-origin:top;transition:transform .9s ease;z-index:3}
+  .env.open .env-flap{transform:rotateX(180deg);z-index:0}
+  .seal{position:absolute;left:50%;top:92px;transform:translate(-50%,-50%);width:58px;height:58px;border-radius:50%;z-index:4;
+        background:radial-gradient(circle at 35% 30%,#e7c27a,#b8893b 60%,#8d6323);box-shadow:0 3px 8px rgba(0,0,0,.25), inset 0 0 0 4px rgba(255,255,255,.15);
+        display:flex;align-items:center;justify-content:center;color:#fff8e6;font-family:'Pinyon Script',cursive;font-size:30px;transition:opacity .4s}
+  .env.open .seal{opacity:0}
+  .env-to{position:absolute;bottom:26px;left:0;right:0;text-align:center;z-index:2;font-family:'Cormorant Garamond',serif;font-style:italic;color:#7a6252;font-size:17px}
+  .tap{font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--soft);animation:pulse 1.8s infinite}
+  @keyframes pulse{50%{opacity:.35}}
+
+  /* ---------- card ---------- */
+  .wrap{max-width:520px;margin:0 auto;padding:22px 14px 50px}
+  .card{position:relative;background:var(--paper);border-radius:4px;padding:46px 26px;margin-bottom:18px;
+        box-shadow:0 1px 0 #fff inset,0 20px 40px -20px rgba(90,60,30,.25),0 2px 6px rgba(90,60,30,.06);
+        background-image:radial-gradient(rgba(184,137,59,.05) 1px,transparent 1px);background-size:6px 6px}
+  .card:before{content:"";position:absolute;inset:12px;border:1px solid var(--gold2);pointer-events:none}
+  .card:after{content:"";position:absolute;inset:17px;border:.5px solid rgba(184,137,59,.35);pointer-events:none}
+  .corner{position:absolute;width:62px;height:62px;pointer-events:none}
+  .corner.tl{top:6px;left:6px}.corner.tr{top:6px;right:6px;transform:scaleX(-1)}
+  .corner.bl{bottom:6px;left:6px;transform:scaleY(-1)}.corner.br{bottom:6px;right:6px;transform:scale(-1,-1)}
+  .center{text-align:center}
+  .kicker{font-size:11px;letter-spacing:5px;text-transform:uppercase;color:var(--gold);font-weight:500}
+  .divider{display:flex;align-items:center;justify-content:center;gap:10px;margin:18px auto;color:var(--gold)}
+  .divider span{height:1px;width:60px;background:linear-gradient(90deg,transparent,var(--gold2))}
+  .divider span:last-child{background:linear-gradient(90deg,var(--gold2),transparent)}
+
+  /* front */
+  .floral{display:block;margin:0 auto}
+  .name{font-size:96px;line-height:1;margin:6px 0 0;padding:0 6px}
+  .line1{font-size:22px;font-style:italic;color:#6b5a50;margin-top:16px}
+  .date{display:flex;justify-content:center;align-items:center;gap:16px;margin-top:22px}
+  .date .side{font-family:'Cormorant Garamond',serif;font-size:14px;letter-spacing:3px;text-transform:uppercase;color:var(--soft);
+              border-top:1px solid var(--gold2);border-bottom:1px solid var(--gold2);padding:6px 4px;min-width:84px}
+  .date .day{font-family:'Cormorant Garamond',serif;font-size:58px;font-weight:500;line-height:1}
+  .date .month{font-size:12px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-top:4px}
+  .count{margin-top:26px;font-size:12px;letter-spacing:2px;color:var(--soft);text-transform:uppercase}
+  .count b{display:block;font-family:'Cormorant Garamond',serif;font-size:26px;letter-spacing:1px;color:var(--ink);font-weight:500;text-transform:none;margin-top:4px}
+
+  /* photos */
+  .h{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:500;text-align:center}
+  .h small{display:block;font-family:'Poppins';font-size:11px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:6px}
+  .arches{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:24px}
+  .arch{aspect-ratio:3/4;border-radius:999px 999px 6px 6px;overflow:hidden;position:relative;
+        background:linear-gradient(170deg,#f6ebe3,#efdcd3);border:1px solid var(--gold3);box-shadow:0 0 0 4px var(--paper),0 0 0 5px rgba(184,137,59,.35)}
+  .arch img{width:100%;height:100%;object-fit:cover}
+  .arch .ph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+            font-family:'Cormorant Garamond',serif;font-style:italic;color:#9b857a;font-size:15px}
+  .arch.wide{grid-column:span 2;aspect-ratio:4/3;border-radius:999px 999px 6px 6px}
+
+  /* wishes */
+  .wish{display:flex;gap:14px;align-items:flex-start;padding:14px 0;border-bottom:1px dashed rgba(184,137,59,.35)}
+  .wish:last-child{border-bottom:0}
+  .wish .n{font-family:'Pinyon Script',cursive;font-size:30px;line-height:1;color:var(--gold);min-width:28px}
+  .wish p{font-size:14px;line-height:1.7;color:#5b4b42}
+  .wish p b{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:600;color:var(--ink);display:block}
+
+  /* candles */
+  .candles{display:flex;justify-content:center;gap:26px;height:150px;align-items:flex-end;margin:26px 0 18px}
+  .candle{position:relative;width:14px;border-radius:3px 3px 2px 2px;
+          background:linear-gradient(90deg,#f3e6cf,#fffaf0 40%,#e8d6b8)}
+  .candle:nth-child(1){height:80px}.candle:nth-child(2){height:104px}.candle:nth-child(3){height:80px}
+  .candle:before{content:"";position:absolute;left:50%;top:-8px;width:2px;height:9px;background:#5a4a3a;transform:translateX(-50%)}
+  .flame{position:absolute;left:50%;top:-34px;width:16px;height:26px;transform:translateX(-50%);
+         border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background:radial-gradient(circle at 50% 75%,#fffbe0 0,#ffd36b 45%,#f2a33a 75%,transparent 76%);
+         filter:drop-shadow(0 0 10px #ffcc66);animation:flick .5s infinite alternate ease-in-out}
+  .glow{position:absolute;left:50%;top:-60px;width:80px;height:80px;transform:translateX(-50%);border-radius:50%;
+        background:radial-gradient(circle,rgba(255,210,120,.35),transparent 70%);transition:opacity .6s}
+  @keyframes flick{to{transform:translateX(-50%) scaleY(1.08) rotate(2deg)}}
+  .out .flame{opacity:0;transition:opacity .4s}.out .glow{opacity:0}
+  .smoke{position:absolute;left:50%;top:-20px;width:6px;height:6px;border-radius:50%;background:rgba(120,110,100,.25);opacity:0}
+  .out .smoke{animation:smoke 1.6s ease-out forwards}
+  @keyframes smoke{0%{opacity:.6;transform:translate(-50%,0) scale(1)}100%{opacity:0;transform:translate(-30%,-50px) scale(4)}}
+  .btn{font-family:'Poppins';font-size:12px;letter-spacing:3px;text-transform:uppercase;font-weight:500;cursor:pointer;
+       background:transparent;color:var(--gold);border:1px solid var(--gold2);padding:13px 22px;border-radius:2px;transition:.3s}
+  .btn:active{background:var(--gold);color:#fff}
+  .note{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:19px;color:#6b5a50;margin-top:16px;min-height:26px}
+
+  /* hero arch */
+  .hero-arch{width:72%;max-width:300px;margin:22px auto 4px;aspect-ratio:3/4;border-radius:999px 999px 8px 8px;overflow:hidden;
+             box-shadow:0 0 0 5px var(--paper),0 0 0 6px var(--gold2),0 18px 30px -14px rgba(90,60,30,.4)}
+  .hero-arch img{width:100%;height:100%;object-fit:cover;object-position:50% 30%}
+
+  /* gallery */
+  .cap{font-family:'Cormorant Garamond',serif;font-style:italic;text-align:center;color:#6b5a50;font-size:18px;margin-top:6px}
+  .gal{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:22px}
+  .tile{position:relative;overflow:hidden;border-radius:6px;aspect-ratio:3/4;background:#efe3d6;cursor:zoom-in;
+        box-shadow:0 0 0 1px rgba(184,137,59,.3),0 8px 18px -10px rgba(90,60,30,.35)}
+  .tile.w{grid-column:span 2;aspect-ratio:4/3}
+  .tile.a{border-radius:999px 999px 6px 6px}
+  .tile img,.tile video{width:100%;height:100%;object-fit:cover;display:block}
+  .tile video{cursor:pointer}
+  .snd{position:absolute;right:8px;bottom:8px;width:32px;height:32px;border-radius:50%;border:0;background:rgba(255,250,243,.85);
+       color:var(--gold);font-size:14px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+  #lb{position:fixed;inset:0;z-index:70;background:rgba(30,22,18,.92);display:none;align-items:center;justify-content:center;padding:18px;cursor:zoom-out}
+  #lb.on{display:flex;animation:fade .3s}
+  #lb img{max-width:100%;max-height:100%;border-radius:4px;box-shadow:0 0 0 4px #fffaf3}
+  @keyframes fade{from{opacity:0}}
+
+  /* letter */
+  .letter{font-family:'Cormorant Garamond',serif;font-size:20px;line-height:1.65;color:#4a3b33}
+  .letter .dear{font-family:'Pinyon Script',cursive;font-size:38px;color:var(--gold);margin-bottom:8px}
+  .sign{text-align:right;margin-top:22px}
+  .sign .script{font-size:42px;line-height:1}
+  .sign small{display:block;font-family:'Poppins';font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--soft);margin-bottom:4px}
+  .end{text-align:center;font-family:'Cormorant Garamond',serif;font-style:italic;color:var(--soft);font-size:15px;margin-top:8px}
+
+  .reveal{opacity:0;transform:translateY(24px);transition:opacity 1s ease,transform 1s ease}
+  .reveal.in{opacity:1;transform:none}
+</style>
+</head>
+<body>
+
+<!-- reusable ornaments -->
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <linearGradient id="gf" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#a87a2e"/><stop offset=".5" stop-color="#e6c784"/><stop offset="1" stop-color="#a87a2e"/></linearGradient>
+    <symbol id="corner" viewBox="0 0 62 62">
+      <path d="M4 58 C4 30 10 12 30 6 C44 2 56 4 58 4" fill="none" stroke="url(#gf)" stroke-width="1.2"/>
+      <path d="M10 52 C12 34 20 20 34 14" fill="none" stroke="url(#gf)" stroke-width=".8"/>
+      <path d="M20 22 c-6 -2 -9 3 -6 7 c3 3 8 0 6 -4" fill="none" stroke="url(#gf)" stroke-width=".9"/>
+      <circle cx="30" cy="6" r="1.8" fill="#c99a4b"/><circle cx="4" cy="40" r="1.4" fill="#c99a4b"/>
+      <path d="M8 30 q6 -2 8 -8" fill="none" stroke="url(#gf)" stroke-width=".7"/>
+    </symbol>
+  </defs>
+</svg>
+
+<canvas id="dust"></canvas>
+
+<!-- envelope -->
+<div id="intro">
+  <div class="env" id="env">
+    <div class="env-body"></div>
+    <div class="env-pocket"></div>
+    <div class="env-bottom"></div>
+    <div class="env-flap"></div>
+    <div class="seal">I</div>
+    <div class="env-to">for Itika</div>
+  </div>
+  <div class="tap">tap to open</div>
+</div>
+
+<div class="wrap">
+
+  <!-- FRONT -->
+  <section class="card center reveal">
+    <svg class="corner tl"><use href="#corner"/></svg><svg class="corner tr"><use href="#corner"/></svg>
+    <svg class="corner bl"><use href="#corner"/></svg><svg class="corner br"><use href="#corner"/></svg>
+
+    <svg class="floral" width="170" height="64" viewBox="0 0 170 64">
+      <path d="M10 46 C45 30 70 30 85 40 C100 30 125 30 160 46" fill="none" stroke="#a9b79a" stroke-width="1.2"/>
+      <g fill="#b9c6a9"><ellipse cx="32" cy="38" rx="9" ry="3.5" transform="rotate(-25 32 38)"/><ellipse cx="50" cy="33" rx="8" ry="3" transform="rotate(15 50 33)"/>
+        <ellipse cx="138" cy="38" rx="9" ry="3.5" transform="rotate(25 138 38)"/><ellipse cx="120" cy="33" rx="8" ry="3" transform="rotate(-15 120 33)"/></g>
+      <g transform="translate(85 30)">
+        <circle r="13" fill="#efc6c4"/><circle r="9" fill="#e9b3b1"/><circle r="5" fill="#e3a9a7"/><circle r="2" fill="#d9b46a"/>
+      </g>
+      <g transform="translate(62 36)"><circle r="7" fill="#f3d6d2"/><circle r="3.5" fill="#e9b9b6"/></g>
+      <g transform="translate(108 36)"><circle r="7" fill="#f3d6d2"/><circle r="3.5" fill="#e9b9b6"/></g>
+      <circle cx="20" cy="44" r="2" fill="#d9b46a"/><circle cx="150" cy="44" r="2" fill="#d9b46a"/>
+    </svg>
+
+    <div class="kicker" style="margin-top:14px">Celebrating the birthday of</div>
+    <div class="name script foil">Itika</div>
+    <div class="hero-arch"><img src="m/hero2.jpg" alt="Itika"></div>
+    <div class="divider"><span></span>✦<span></span></div>
+    <div class="line1 serif">Ek aur saal, aur bhi khoobsurat.</div>
+
+    <div class="date">
+      <div class="side">Monday</div>
+      <div><div class="day foil">16</div><div class="month">November</div></div>
+      <div class="side">2026</div>
+    </div>
+
+    <div class="count" id="count"></div>
+  </section>
+
+  <section class="card reveal">
+    <svg class="corner tl"><use href="#corner"/></svg><svg class="corner tr"><use href="#corner"/></svg>
+    <svg class="corner bl"><use href="#corner"/></svg><svg class="corner br"><use href="#corner"/></svg>
+    <div class="h"><small>Chapter i</small>Taj Wali Yaadein</div>
+    <div class="cap">Taj Mahal bhi tha, par highlight tum thi.</div>
+    <div class="gal">
+      <div class="tile w"><img src="m/taj1.jpg" loading="lazy" alt=""></div>
+      <div class="tile a"><img src="m/taj2.jpg" loading="lazy" alt=""></div>
+      <div class="tile a"><img src="m/taj3.jpg" loading="lazy" alt=""></div>
+    </div>
+  </section>
+
+  <section class="card reveal">
+    <svg class="corner tl"><use href="#corner"/></svg><svg class="corner tr"><use href="#corner"/></svg>
+    <svg class="corner bl"><use href="#corner"/></svg><svg class="corner br"><use href="#corner"/></svg>
+    <div class="h"><small>Chapter ii</small>Long Drives</div>
+    <div class="cap">Steering tumhare haath, aur music full volume.</div>
+    <div class="gal">
+      <div class="tile w v"><video src="m/v2.mp4" poster="m/v2.jpg" muted loop playsinline preload="metadata"></video><button class="snd" aria-label="sound">🔇</button></div>
+      <div class="tile  v"><video src="m/v1.mp4" poster="m/v1.jpg" muted loop playsinline preload="metadata"></video><button class="snd" aria-label="sound">🔇</button></div>
+      <div class="tile "><img src="m/drive3.jpg" loading="lazy" alt=""></div>
+      <div class="tile w"><img src="m/drive1.jpg" loading="lazy" alt=""></div>
+      <div class="tile  v"><video src="m/v3.mp4" poster="m/v3.jpg" muted loop playsinline preload="metadata"></video><button class="snd" aria-label="sound">🔇</button></div>
+      <div class="tile "><img src="m/drive2.jpg" loading="lazy" alt=""></div>
+    </div>
+  </section>
+
+  <section class="card reveal">
+    <svg class="corner tl"><use href="#corner"/></svg><svg class="corner tr"><use href="#corner"/></svg>
+    <svg class="corner bl"><use href="#corner"/></svg><svg class="corner br"><use href="#corner"/></svg>
+    <div class="h"><small>Chapter iii</small>Video Call Diaries</div>
+    <div class="cap">Screen pe bhi utni hi pyaari.</div>
+    <div class="gal">
+      <div class="tile "><img src="m/call1.jpg" loading="lazy" alt=""></div>
+      <div class="tile "><img src="m/call2.jpg" loading="lazy" alt=""></div>
+      <div class="tile w"><img src="m/call3.jpg" loading="lazy" alt=""></div>
+    </div>
+  </section>
+
+  <section class="card reveal">
+    <svg class="corner tl"><use href="#corner"/></svg><svg class="corner tr"><use href="#corner"/></svg>
+    <svg class="corner bl"><use href="#corner"/></svg><svg class="corner br"><use href="#corner"/></svg>
+    <div class="h"><small>Chapter iv</small>Fragments of Forever</div>
+    <div class="cap">The quiet, unremarkable moments that somehow became the most unforgettable.</div>
+    <div class="gal">
+      <div class="tile w"><img src="m/food.jpg" loading="lazy" alt=""></div>
+      <div class="tile a"><img src="m/walk.jpg" loading="lazy" alt=""></div>
+      <div class="tile a"><img src="m/mirror.jpg" loading="lazy" alt=""></div>
+      <div class="tile w"><img src="m/gang.jpg" loading="lazy" alt=""></div>
+      <div class="tile "><img src="m/lift.jpg" loading="lazy" alt=""></div>
+      <div class="tile "><img src="m/ring.jpg" loading="lazy" alt=""></div>
+      <div class="tile w v"><video src="m/v4.mp4" poster="m/v4.jpg" muted loop playsinline preload="metadata"></video><button class="snd" aria-label="sound">🔇</button></div>
+    </div>
+  </section>
+
+  <!-- WISHES -->
+  <section class="card reveal">
+    <svg class="corner tl"><use href="#corner"/></svg><svg class="corner tr"><use href="#corner"/></svg>
+    <svg class="corner bl"><use href="#corner"/></svg><svg class="corner br"><use href="#corner"/></svg>
+    <div class="h"><small>For the year ahead</small>Wishing You</div>
+    <div class="divider"><span></span>✦<span></span></div>
+    <div class="wish"><div class="n">i</div><p><b>Bahut saari khushiyan</b>Har din aaj jitna hi special ho, aur har smile pehle se badi.</p></div>
+    <div class="wish"><div class="n">ii</div><p><b>Saare sapne poore ho</b>Jo bhi socha hai is saal, woh sab tumhare paas ho.</p></div>
+    <div class="wish"><div class="n">iii</div><p><b>Sukoon aur achhe log</b>Bas achha khana, achhi baatein, aur zero tension.</p></div>
+  </section>
+
+  <!-- CANDLES -->
+  <section class="card center reveal">
+    <svg class="corner tl"><use href="#corner"/></svg><svg class="corner tr"><use href="#corner"/></svg>
+    <svg class="corner bl"><use href="#corner"/></svg><svg class="corner br"><use href="#corner"/></svg>
+    <div class="h"><small>Close your eyes</small>Make a Wish</div>
+    <div class="candles" id="candles">
+      <div class="candle"><div class="glow"></div><div class="flame"></div><div class="smoke"></div></div>
+      <div class="candle"><div class="glow"></div><div class="flame"></div><div class="smoke"></div></div>
+      <div class="candle"><div class="glow"></div><div class="flame"></div><div class="smoke"></div></div>
+    </div>
+    <button class="btn" id="blow">Blow the candles</button>
+    <div class="note" id="note"></div>
+  </section>
+
+  <!-- LETTER -->
+  <section class="card reveal">
+    <svg class="corner tl"><use href="#corner"/></svg><svg class="corner tr"><use href="#corner"/></svg>
+    <svg class="corner bl"><use href="#corner"/></svg><svg class="corner br"><use href="#corner"/></svg>
+    <div class="letter">
+      <div class="dear">Dear Itika,</div>
+      Happy Birthday! You're that one person jiske saath baat karke the worst day bhi theek lagne lagta hai.
+      Your laugh, your endless baatein and that little bit of pagalpan, everything about you is just so special.<br><br>
+      Stay exactly the way you are, and keep smiling always. I hope this year turns out to be your most beautiful one yet,
+      aur jo bhi tum chaho, woh sab tumhe mile. Enjoy your day to the fullest!
+      <div class="sign"><span class="script foil">Mayank</span></div>
+    </div>
+  </section>
+
+  <div class="end">✦</div>
+</div>
+
+<div id="lb"><img id="lbimg" alt=""></div>
+
+<script>
+// envelope
+const env=document.getElementById('env'),intro=document.getElementById('intro');
+function openEnv(){ if(env.classList.contains('open'))return; env.classList.add('open');
+  setTimeout(()=>{intro.classList.add('gone');burst(140);revealCheck();},950); }
+intro.addEventListener('click',openEnv);
+
+// countdown to 16 Nov 2026, 00:00 IST
+const target=new Date('2026-11-16T00:00:00+05:30').getTime(), dayEnd=target+864e5;
+function cd(){const now=Date.now(),el=document.getElementById('count');
+  if(now<target){let s=Math.floor((target-now)/1000),h=Math.floor(s/3600),m=Math.floor(s%3600/60);s%=60;
+    el.innerHTML='Your day begins in<b>'+String(h).padStart(2,'0')+'h '+String(m).padStart(2,'0')+'m '+String(s).padStart(2,'0')+'s</b>';}
+  else if(now<dayEnd){el.innerHTML='Today is your day<b>Happy Birthday ✨</b>';}
+  else{el.innerHTML='Once a year, but worth it<b>Happy Birthday ✨</b>';}}
+cd();setInterval(cd,1000);
+
+// scroll reveal
+function revealCheck(){document.querySelectorAll('.reveal').forEach(r=>{if(r.getBoundingClientRect().top<innerHeight*0.9)r.classList.add('in')})}
+addEventListener('scroll',revealCheck);
+
+// gold dust + petals
+const cv=document.getElementById('dust'),cx=cv.getContext('2d');let P=[];
+function size(){cv.width=innerWidth*devicePixelRatio;cv.height=innerHeight*devicePixelRatio;cx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0)}size();addEventListener('resize',size);
+const C=['#d9b46a','#e6c784','#c99a4b','#efc6c4','#f3d6d2'];
+function add(n,top){for(let i=0;i<n;i++){const petal=Math.random()<.4;P.push({x:Math.random()*innerWidth,y:top?-10-Math.random()*innerHeight*.6:Math.random()*innerHeight,
+  s:petal?4+Math.random()*4:1+Math.random()*2.2,c:petal?C[3+(i%2)]:C[i%3],petal,vy:.4+Math.random()*1.1,vx:-.3+Math.random()*.6,r:Math.random()*6,vr:-.03+Math.random()*.06,a:.5+Math.random()*.5})}}
+function burst(n){add(n,true)}
+add(30,false);
+(function loop(){cx.clearRect(0,0,innerWidth,innerHeight);
+  P.forEach(p=>{p.y+=p.vy;p.x+=p.vx+Math.sin(p.y/40)*.2;p.r+=p.vr;cx.globalAlpha=p.a;cx.fillStyle=p.c;cx.save();cx.translate(p.x,p.y);cx.rotate(p.r);
+    if(p.petal){cx.beginPath();cx.ellipse(0,0,p.s,p.s*.55,0,0,Math.PI*2);cx.fill();}else{cx.beginPath();cx.arc(0,0,p.s,0,Math.PI*2);cx.fill();}
+    cx.restore();});
+  P=P.filter(p=>p.y<innerHeight+20); if(P.length<25)add(1,true);
+  requestAnimationFrame(loop);})();
+
+// candles
+document.getElementById('blow').onclick=function(){
+  const c=document.getElementById('candles'),note=document.getElementById('note');
+  if(c.classList.contains('out')){c.classList.remove('out');this.textContent='Blow the candles';note.textContent='';return;}
+  c.classList.add('out');burst(160);note.textContent='Wish ho gayi. Ab bas poori hone ka intezaar ✨';this.textContent='Light them again';
+};
+
+// lightbox
+const lb=document.getElementById('lb'),lbi=document.getElementById('lbimg');
+document.querySelectorAll('.tile img,.hero-arch img').forEach(i=>i.addEventListener('click',()=>{lbi.src=i.src;lb.classList.add('on')}));
+lb.addEventListener('click',()=>lb.classList.remove('on'));
+// videos: play in view, tap for sound
+const vo=new IntersectionObserver(es=>es.forEach(e=>{const v=e.target;if(e.isIntersecting){v.play().catch(()=>{})}else v.pause()}),{threshold:.4});
+document.querySelectorAll('.tile video').forEach(v=>{vo.observe(v);
+  const b=v.parentNode.querySelector('.snd');
+  const t=()=>{const m=!v.muted;document.querySelectorAll('.tile video').forEach(x=>{x.muted=true;x.parentNode.querySelector('.snd').textContent='🔇'});
+    v.muted=m;b.textContent=m?'🔇':'🔊';v.play().catch(()=>{})};
+  b.addEventListener('click',e=>{e.stopPropagation();t()});v.addEventListener('click',t);});
+</script>
+</body>
+</html>
