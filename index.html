@@ -324,16 +324,18 @@
 // music (YouTube)
 const VID='5vflRt4V5Pk'; let yt=null, ytReady=false, wantPlay=false, playing=false;
 const mus=document.getElementById('music'), mlab=document.getElementById('mlabel');
-function mUI(){mus.classList.toggle('playing',playing);mlab.textContent=playing?'Pause music':'Play our song';}
+function mUI(){const p=playing&&unmuted;mus.classList.toggle('playing',p);mlab.textContent=p?'Pause music':'Play our song';}
 (function(){const t=document.createElement('script');t.src='https://www.youtube.com/iframe_api';document.head.appendChild(t);})();
 window.onYouTubeIframeAPIReady=function(){
   yt=new YT.Player('yt',{videoId:VID,playerVars:{playsinline:1,controls:0,rel:0,modestbranding:1,loop:1,playlist:VID},
-    events:{onReady:()=>{ytReady=true;yt.setVolume(80);if(wantPlay)yt.playVideo();},
+    events:{onReady:()=>{ytReady=true;yt.setVolume(80);if(wantPlay){yt.unMute();yt.playVideo();}else{yt.mute();yt.playVideo();}},
             onStateChange:e=>{playing=(e.data===1);mUI();},
             onError:()=>{mus.outerHTML='<a id="music" class="on" href="https://music.youtube.com/watch?v='+VID+'" target="_blank" rel="noopener"><span class="bars"><i></i><i></i><i></i></span><span>Play our song</span></a>';}}});
 };
-function startMusic(){wantPlay=true;mus.classList.add('on');if(ytReady){try{yt.playVideo()}catch(e){}}}
-mus.addEventListener('click',()=>{if(!ytReady){wantPlay=true;return;} if(playing)yt.pauseVideo(); else yt.playVideo();});
+let unmuted=false;
+function startMusic(){wantPlay=true;mus.classList.add('on');if(ytReady&&!unmuted){try{unmuted=true;yt.unMute();yt.setVolume(80);yt.seekTo(0,true);yt.playVideo();}catch(e){}}}
+['pointerdown','touchstart','keydown'].forEach(ev=>document.addEventListener(ev,()=>{if(!unmuted)startMusic();},{once:true,passive:true}));
+mus.addEventListener('click',e=>{e.stopPropagation();if(!ytReady){wantPlay=true;return;} if(!unmuted){startMusic();return;} if(playing)yt.pauseVideo(); else {yt.unMute();yt.playVideo();}});
 // envelope
 const env=document.getElementById('env'),intro=document.getElementById('intro');
 function openEnv(){ if(env.classList.contains('open'))return; env.classList.add('open'); startMusic();
